@@ -135,5 +135,5 @@ module.exports = function(RED) {
             return msg;
         });
     }
-    RED.nodes.registerType("annotate-image", AnnotateNode);
+    RED.nodes.registerType("annotate-canvas", AnnotateNode);
 };
