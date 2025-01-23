@@ -10,9 +10,10 @@ detected in the image by a TensorFlow node.
 Install
 -------
 
-Either use the Edit Menu - Manage Palette option to install, or run the following command in your Node-RED user directory - typically `~/.node-red`
-
-    npm install annotate-canvas
+Run the following commands in your Node-RED user directory - typically `~/.node-red`
+sudo apt-get update
+sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+npm install annotate-canvas
 
 
 Usage
