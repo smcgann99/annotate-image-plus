@@ -4,6 +4,11 @@
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
     <div class="form-row">
+        <label style="padding-top: 8px" for="node-input-data"><i class="fa fa-ellipsis-h"></i> Property</label>
+        <input type="text" id="node-input-data" style="width:70%">
+        <input type="hidden" id="node-input-dataType">
+    </div>
+    <div class="form-row">
         <span id="node-input-row-stroke">
             <label for="node-input-stroke">Line Color</label>
         </span>
@@ -64,7 +69,13 @@
             stroke: {value:"#ffC000"},
             lineWidth: {value:5},
             fontSize: {value: 24},
-            fontColor: {value: "#ffC000"}
+            fontColor: {value: "#ffC000"},
+            data: {
+                value: "payload",
+                required: true,
+                validate: RED.validators.typedInput("dataType")
+            },
+            dataType: { value: "msg" },
 
         },
         inputs:1,
@@ -77,6 +88,11 @@
             return this.name?"node_label_italic":"";
         },
         oneditprepare: function() {
+            $('#node-input-data').typedInput({
+                default: 'msg',
+                typeField: $("#node-input-dataType"),
+                types: ['msg']
+            });
             RED.colorPicker.create({
                 id:"node-input-stroke",
                 value: this.stroke || "#ffC000",
@@ -99,3 +115,4 @@
     });
 })();
 </script>
+

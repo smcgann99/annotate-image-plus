@@ -11,21 +11,32 @@ module.exports = function(RED) {
         }
     }
 
-    function AnnotateNode(n) {
-        RED.nodes.createNode(this, n);
+    function AnnotateNode(config) {
+        RED.nodes.createNode(this, config);
+        this.data       = config.data || "";
+        this.dataType   = config.dataType || "msg";
         var node = this;
-        const defaultFill = n.fill || "";
-        const defaultStroke = n.stroke || "#ffC000";
-        const defaultLineWidth = parseInt(n.lineWidth) || 5;
-        const defaultFontSize = n.fontSize || 24;
-        const defaultFontColor = n.fontColor || "#ffC000";
+        const defaultFill = config.fill || "";
+        const defaultStroke = config.stroke || "#ffC000";
+        const defaultLineWidth = parseInt(config.lineWidth) || 5;
+        const defaultFontSize = config.fontSize || 24;
+        const defaultFontColor = config.fontColor || "#ffC000";
+        let input = null;
         loadFont();
 
         this.on("input", function(msg) {
-            if (Buffer.isBuffer(msg.payload)) {
+            RED.util.evaluateNodeProperty(node.data, node.dataType, node, msg, (err, value) => {
+                if (err) {
+                    handleError(err, msg, "Invalid source");
+                    return;
+                } else {
+                    input = value;
+                }
+            });
+            if (Buffer.isBuffer(input)) {
 				   if (Array.isArray(msg.annotations) && msg.annotations.length > 0) {
 
-                    const buffer = Buffer.from(msg.payload);
+                    const buffer = Buffer.from(input);
                     loadImage(buffer).then(img => {
                         const canvas = createCanvas(img.width, img.height);
                         const ctx = canvas.getContext('2d');

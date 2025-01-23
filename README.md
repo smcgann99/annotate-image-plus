@@ -1,8 +1,7 @@
-node-red-node-annotate-image
+annotate-canvas
 ==================
 
-A <a href="http://nodered.org" target="_new">Node-RED</a> node that can annotate
-a JPEG image.
+A node that can annotate JPEG, PNG or GIF images.
 
 The node is currently limited to drawing rectangles and circles over the image.
 That can be used, for example, to annotate an image with bounding boxes of features
@@ -13,13 +12,13 @@ Install
 
 Either use the Edit Menu - Manage Palette option to install, or run the following command in your Node-RED user directory - typically `~/.node-red`
 
-    npm install node-red-node-annotate-image
+    npm install annotate-canvas
 
 
 Usage
 -----
 
-The JPEG image should be passed to the node as a Buffer object under `msg.payload`.
+The JPEG, PNG or GIF image should be passed to the node as a Buffer object under the configured property, default = `msg.payload`.
 
 The annotations are provided in <code>msg.annotations</code> and are applied in order.
 
