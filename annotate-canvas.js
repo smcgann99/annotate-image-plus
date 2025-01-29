@@ -24,8 +24,9 @@ module.exports = function(RED) {
         this.dataType = config.dataType || "msg";
         var node = this;
         const defaultStroke = config.stroke || "#ffC000";
-        const defaultFontSize = 20;
+        const defaultMinFontSize = config.minFontSize || 10;
         const defaultFontColor = config.fontColor || "#ffC000";
+        const defaultTextBackground = config.textBackground || "#ffffff";
         let input = null;
         loadFont();
 
@@ -52,7 +53,10 @@ module.exports = function(RED) {
                         const annotationPromises = msg.annotations.map(async function(annotation) {
                             let x, y, r, w, h, textX, textY, fontSize;
                             annotation.fontSize = annotation.fontSize || config.fontSize;
+                            annotation.minFontSize = annotation.minFontSize || defaultMinFontSize;
+                            annotation.textBackground = annotation.textBackground || defaultTextBackground;
                             annotation.lineWidth = annotation.lineWidth || config.lineWidth;
+                            annotation.fontColor = annotation.fontColor || defaultFontColor;
 
                             if (!annotation.type && annotation.bbox) {
                                 annotation.type = 'rect';
@@ -86,10 +90,9 @@ module.exports = function(RED) {
                                     ctx.stroke();
 
                                     if (annotation.label) {
-                                        fontSize = annotation.fontSize || await calculateFontSize(annotation.label, w, defaultFontSize);
+                                        fontSize = annotation.fontSize || await calculateFontSize(annotation.label, w, annotation.minFontSize);
                                         ctx.font = `${fontSize}px 'Source Sans Pro'`;
-                                        ctx.fillStyle = annotation.fontColor || defaultFontColor;
-
+                                        
                                         if (annotation.labelLocation) {
                                             if (annotation.labelLocation === "top") {
                                                 textY = Math.max(y - Math.round(0.2 * fontSize), 0);
@@ -100,7 +103,10 @@ module.exports = function(RED) {
                                             textY = (y - Math.round(0.2 * fontSize) < 0 || y - Math.round(0.2 * fontSize) < img.height - (y + h + Math.round(1.2 * fontSize))) ? y + h + Math.round(1.2 * fontSize) : y - Math.round(0.2 * fontSize);
                                         }
 
-                                        ctx.fillText(annotation.label, x, textY);
+                                        ctx.fillStyle = annotation.textBackground; // Set background color
+                                        ctx.fillRect(x, textY - fontSize, ctx.measureText(annotation.label).width, fontSize); // Draw background rectangle
+                                        ctx.fillStyle = annotation.fontColor; // Set text color
+                                        ctx.fillText(annotation.label, x, textY); // Draw text
                                     }
                                     break;
                                 case 'circle':
@@ -120,10 +126,9 @@ module.exports = function(RED) {
                                     ctx.stroke();
 
                                     if (annotation.label) {
-                                        fontSize = annotation.fontSize || await calculateFontSize(annotation.label, 2 * r, defaultFontSize);
+                                        fontSize = annotation.fontSize || await calculateFontSize(annotation.label, 2 * r, annotation.minFontSize);
                                         ctx.font = `${fontSize}px 'Source Sans Pro'`;
-                                        ctx.fillStyle = annotation.fontColor || defaultFontColor;
-
+                                        
                                         if (annotation.labelLocation) {
                                             if (annotation.labelLocation === "top") {
                                                 textY = Math.max(y - r - Math.round(0.2 * fontSize), 0);
@@ -134,7 +139,10 @@ module.exports = function(RED) {
                                             textY = (y - r - Math.round(0.2 * fontSize) < 0 || y - r - Math.round(0.2 * fontSize) < img.height - (y + r + Math.round(1.2 * fontSize))) ? y + r + Math.round(1.2 * fontSize) : y - r - Math.round(0.2 * fontSize);
                                         }
 
-                                        ctx.fillText(annotation.label, x-r, textY);
+                                        ctx.fillStyle = annotation.textBackground; // Set background color
+                                        ctx.fillRect(x - r, textY - fontSize, ctx.measureText(annotation.label).width, fontSize); // Draw background rectangle
+                                        ctx.fillStyle = annotation.fontColor; // Set text color
+                                        ctx.fillText(annotation.label, x-r, textY); // Draw text
                                     }
                                     break;
                             }
@@ -156,22 +164,22 @@ module.exports = function(RED) {
             }
         });
 
-        async function calculateFontSize(text, maxWidth, defaultFontSize) {
+        async function calculateFontSize(text, maxWidth, defaultMinFontSize) {
             const canvas = createCanvas(200, 200);
             const ctx = canvas.getContext('2d');
-            ctx.font = `${defaultFontSize}px 'Source Sans Pro'`;
+            ctx.font = `${defaultMinFontSize}px 'Source Sans Pro'`;
             const textWidth = ctx.measureText(text).width;
             const scaleFactor = maxWidth / textWidth;
-            return Math.ceil(Math.max(defaultFontSize * scaleFactor, defaultFontSize));
+            return Math.ceil(Math.max(defaultMinFontSize * scaleFactor, defaultMinFontSize));
         }
 
         function handleError(err, msg, errorText, originalPayload = null) {
-            node.error(errorText, msg);
+            node.error(err,errorText, msg);
             msg.error = err;
             if (originalPayload) {
                 msg.payload = originalPayload;
             }
-            node.send(msg); // Send the message to the single output
+            node.send(msg); 
         }
     }
 

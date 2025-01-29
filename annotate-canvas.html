@@ -22,6 +22,16 @@
         <label style="margin-left: 20px" for="node-input-fontSize">Font Size</label>
         <input style="width: 50px" type="text" id="node-input-fontSize">
     </div>
+
+
+    <div class="form-row">
+        <span id="node-input-row-textBackground">
+            <label for="node-input-textBackground">Background</label>
+        </span>
+        <label style="margin-left: 20px" for="node-input-minFontSize">Min Font Size</label>
+        <input style="width: 50px" type="text" id="node-input-minFontSize"placeholder="10">
+    </div>
+
 </script>
 
 <script type="text/javascript">
@@ -66,6 +76,8 @@
             lineWidth: {value:""},
             fontSize: {value: ""},
             fontColor: {value: "#ffC000"},
+            textBackground: {value: "#ffffff"},
+            minFontSize: {value: "10"},
             data: {
                 value: "payload",
                 required: true,
@@ -107,6 +119,15 @@
                 cellHeight: 16,
                 cellMargin: 3
             }).appendTo("#node-input-row-fontColor");
+            RED.colorPicker.create({
+                id:"node-input-textBackground",
+                value: this.textBackground || "#ffffff",
+                palette: colorPalette,
+                cellPerRow: colorCount,
+                cellWidth: 16,
+                cellHeight: 16,
+                cellMargin: 3
+            }).appendTo("#node-input-row-textBackground");
         }
     });
 })();
