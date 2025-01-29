@@ -11,15 +11,20 @@ module.exports = function(RED) {
         }
     }
 
+    function calculateLineWidth(height) {
+        const referenceHeight = 700;
+        const referenceWidth = 14;
+        let width = Math.round((height / referenceHeight) * referenceWidth);
+        return Math.max(width, 1);
+    }
+
     function AnnotateNode(config) {
         RED.nodes.createNode(this, config);
-        this.data       = config.data || "";
-        this.dataType   = config.dataType || "msg";
+        this.data = config.data || "";
+        this.dataType = config.dataType || "msg";
         var node = this;
-        const defaultFill = config.fill || "";
         const defaultStroke = config.stroke || "#ffC000";
-        const defaultLineWidth = parseInt(config.lineWidth) || 5;
-        const defaultFontSize = config.fontSize || 24;
+        const defaultFontSize = 20;
         const defaultFontColor = config.fontColor || "#ffC000";
         let input = null;
         loadFont();
@@ -34,7 +39,7 @@ module.exports = function(RED) {
                 }
             });
             if (Buffer.isBuffer(input)) {
-				   if (Array.isArray(msg.annotations) && msg.annotations.length > 0) {
+                if (Array.isArray(msg.annotations) && msg.annotations.length > 0) {
 
                     const buffer = Buffer.from(input);
                     loadImage(buffer).then(img => {
@@ -44,11 +49,10 @@ module.exports = function(RED) {
 
                         ctx.lineJoin = 'bevel';
 
-                        msg.annotations.forEach(function(annotation) {
-                            ctx.fillStyle = annotation.fill || defaultFill;
-                            ctx.strokeStyle = annotation.stroke || defaultStroke;
-                            ctx.lineWidth = annotation.lineWidth || defaultLineWidth;
-                            let x, y, r, w, h;
+                        const annotationPromises = msg.annotations.map(async function(annotation) {
+                            let x, y, r, w, h, textX, textY, fontSize;
+                            annotation.fontSize = annotation.fontSize || config.fontSize;
+                            annotation.lineWidth = annotation.lineWidth || config.lineWidth;
 
                             if (!annotation.type && annotation.bbox) {
                                 annotation.type = 'rect';
@@ -67,7 +71,6 @@ module.exports = function(RED) {
                                         w = annotation.w;
                                         h = annotation.h;
                                     }
-
                                     if (x < 0) {
                                         w += x;
                                         x = 0;
@@ -78,32 +81,26 @@ module.exports = function(RED) {
                                     }
                                     ctx.beginPath();
                                     ctx.rect(x, y, w, h);
+                                    ctx.strokeStyle = annotation.stroke || defaultStroke;
+                                    ctx.lineWidth = annotation.lineWidth || calculateLineWidth(h);
                                     ctx.stroke();
 
                                     if (annotation.label) {
-                                        ctx.font = `${annotation.fontSize || defaultFontSize}px 'Source Sans Pro'`;
+                                        fontSize = annotation.fontSize || await calculateFontSize(annotation.label, w, defaultFontSize);
+                                        ctx.font = `${fontSize}px 'Source Sans Pro'`;
                                         ctx.fillStyle = annotation.fontColor || defaultFontColor;
-                                        ctx.textBaseline = "top";
-                                        ctx.textAlign = "left";
 
                                         if (annotation.labelLocation) {
                                             if (annotation.labelLocation === "top") {
-                                                y = y - (20 + ((defaultLineWidth * 0.5) + Number(defaultFontSize)));
-                                                if (y < 0) y = 0;
+                                                textY = Math.max(y - Math.round(0.2 * fontSize), 0);
                                             } else if (annotation.labelLocation === "bottom") {
-                                                y = y + (10 + h + ((defaultLineWidth * 0.5) + Number(defaultFontSize)));
-                                                ctx.textBaseline = "bottom";
+                                                textY = Math.min(y + h + Math.round(1.2 * fontSize), img.height);
                                             }
                                         } else {
-                                            if (y < 0 + (20 + ((defaultLineWidth * 0.5) + Number(defaultFontSize)))) {
-                                                y = y + (10 + h + ((defaultLineWidth * 0.5) + Number(defaultFontSize)));
-                                                ctx.textBaseline = "bottom";
-                                            } else {
-                                                y = y - (20 + ((defaultLineWidth * 0.5) + Number(defaultFontSize)));
-                                                if (y < 0) y = 0;
-                                            }
+                                            textY = (y - Math.round(0.2 * fontSize) < 0 || y - Math.round(0.2 * fontSize) < img.height - (y + h + Math.round(1.2 * fontSize))) ? y + h + Math.round(1.2 * fontSize) : y - Math.round(0.2 * fontSize);
                                         }
-                                        ctx.fillText(annotation.label, x, y);
+
+                                        ctx.fillText(annotation.label, x, textY);
                                     }
                                     break;
                                 case 'circle':
@@ -118,33 +115,65 @@ module.exports = function(RED) {
                                     }
                                     ctx.beginPath();
                                     ctx.arc(x, y, r, 0, Math.PI * 2);
+                                    ctx.strokeStyle = annotation.stroke || defaultStroke;
+                                    ctx.lineWidth = annotation.lineWidth || calculateLineWidth(r * 2);
                                     ctx.stroke();
 
                                     if (annotation.label) {
-                                        ctx.font = `${annotation.fontSize || defaultFontSize}px 'Source Sans Pro'`;
+                                        fontSize = annotation.fontSize || await calculateFontSize(annotation.label, 2 * r, defaultFontSize);
+                                        ctx.font = `${fontSize}px 'Source Sans Pro'`;
                                         ctx.fillStyle = annotation.fontColor || defaultFontColor;
-                                        ctx.textBaseline = "middle";
-                                        ctx.textAlign = "center";
-                                        ctx.fillText(annotation.label, x, y);
+
+                                        if (annotation.labelLocation) {
+                                            if (annotation.labelLocation === "top") {
+                                                textY = Math.max(y - r - Math.round(0.2 * fontSize), 0);
+                                            } else if (annotation.labelLocation === "bottom") {
+                                                textY = Math.min(y + r + Math.round(1.2 * fontSize), img.height);
+                                            }
+                                        } else {
+                                            textY = (y - r - Math.round(0.2 * fontSize) < 0 || y - r - Math.round(0.2 * fontSize) < img.height - (y + r + Math.round(1.2 * fontSize))) ? y + r + Math.round(1.2 * fontSize) : y - r - Math.round(0.2 * fontSize);
+                                        }
+
+                                        ctx.fillText(annotation.label, x-r, textY);
                                     }
                                     break;
                             }
                         });
 
-                        const outputBuffer = canvas.toBuffer('image/jpeg', { quality: 0.9 });
-                        msg.payload = outputBuffer;
-                        node.send(msg);
+                        return Promise.all(annotationPromises).then(() => {
+                            const outputBuffer = canvas.toBuffer('image/jpeg', { quality: 0.9 });
+                            msg.payload = outputBuffer;
+                            node.send(msg);
+                        });
                     }).catch(err => {
-                        node.error(err, msg);
+                        handleError(err, msg, "Image processing error");
                     });
                 } else {
-                    node.send(msg);
+                    handleError(new Error("No annotations provided"), msg, "No annotations", input);
                 }
             } else {
-                node.error("Payload not a Buffer", msg);
+                handleError(new Error("Input is not a buffer"), msg, "Invalid input");
             }
-            return msg;
         });
+
+        async function calculateFontSize(text, maxWidth, defaultFontSize) {
+            const canvas = createCanvas(200, 200);
+            const ctx = canvas.getContext('2d');
+            ctx.font = `${defaultFontSize}px 'Source Sans Pro'`;
+            const textWidth = ctx.measureText(text).width;
+            const scaleFactor = maxWidth / textWidth;
+            return Math.ceil(Math.max(defaultFontSize * scaleFactor, defaultFontSize));
+        }
+
+        function handleError(err, msg, errorText, originalPayload = null) {
+            node.error(errorText, msg);
+            msg.error = err;
+            if (originalPayload) {
+                msg.payload = originalPayload;
+            }
+            node.send(msg); // Send the message to the single output
+        }
     }
+
     RED.nodes.registerType("annotate-canvas", AnnotateNode);
 };

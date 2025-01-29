@@ -10,9 +10,11 @@ detected in the image by a TensorFlow node.
 Install
 -------
 
+This node requires the canvas package, which must be installed first.
 Run the following commands in your Node-RED user directory - typically `~/.node-red`
 
-For Debian / xxx sudo apt-get update
+For Debian  
+sudo apt-get update
 sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 npm install annotate-canvas
 
@@ -35,11 +37,11 @@ Each annotation is an object with the following properties:
    `[x, y, w, h]`. If this property is set and `type` is not set, it will default to `rect`.
  - `label` (*string*) : an optional piece of text to label the annotation with
  - `stroke` (*string*) : the line color of the annotation. Default: `#ffC000`
- - `lineWidth` (*number*) : the stroke width used to draw the annotation. Default: `5`
- - `fontSize` (*number*) : the font size to use for the label. Default: `24`
+ - `lineWidth` (*number*) : the stroke width used to draw the annotation. `Automatic if not provided`
+ - `fontSize` (*number*) : the font size to use for the label. `Automatic if not provided`
  - `fontColor` (*string*) : the color of the font to use for the label. Default: `#ffC000`
  - `labelLocation` (*string*) : The location to place the label. `top` or `bottom`.
-    If this propery is not set it will default to `automatic` and make the best guess based on location.
+    If this property is not set it will default to `automatic` and place where there is more room.
 
 
 Examples

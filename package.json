@@ -2,9 +2,7 @@
     "name": "annotate-canvas",
     "version": "0.0.1",
     "description": "A Node-RED node that can annotate an image",
-    "dependencies": {
-        
-    },
+    "dependencies": {},
     "repository": {
         "type": "git",
         "url": "https://github.com/smcgann99/annotate-canvas.git",
@@ -19,9 +17,13 @@
             "annotate-canvas": "annotate-canvas.js"
         }
     },
+    "author": "S McGann",
     "contributors": [
         {
             "name": "S McGann"
+        },
+        {
+            "name": "Nick O'Leary"
         }
     ]
 }

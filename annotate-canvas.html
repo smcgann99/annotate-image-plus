@@ -27,9 +27,6 @@
 <script type="text/javascript">
 
 (function() {
-    // Lifted from @node-red/editor-client/.../group.js
-    // Need to make this a default built-in palette so we don't have to copy
-    // it around.
     var colorPalette = [
         "#ff0000",
         "#ffC000",
@@ -65,10 +62,9 @@
         color:"#f1c2f0",
         defaults: {
             name: {value:""},
-            fill: {value:""},
             stroke: {value:"#ffC000"},
-            lineWidth: {value:5},
-            fontSize: {value: 24},
+            lineWidth: {value:""},
+            fontSize: {value: ""},
             fontColor: {value: "#ffC000"},
             data: {
                 value: "payload",
