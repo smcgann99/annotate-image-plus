@@ -51,7 +51,7 @@ module.exports = function(RED) {
                         const canvas = createCanvas(img.width, img.height);
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0);
-                        ctx.lineJoin = 'bevel';
+                        ctx.lineJoin = 'round';
                         ctx.textBaseline = "middle";
 
                         const annotationPromises = msg.annotations.map(async function(annotation) {
@@ -180,5 +180,5 @@ module.exports = function(RED) {
         }
     }
 
-    RED.nodes.registerType("annotate-canvas", AnnotateNode);
+    RED.nodes.registerType("annotate-image-plus", AnnotateNode);
 };

@@ -1,4 +1,4 @@
-node-red-annotate-image-ultimate
+node-red annotate-image-plus
 ================================
 
 A <a href="http://nodered.org" target="_blank">Node-RED</a> node that can annotate JPEG, PNG or GIF images.
@@ -29,7 +29,7 @@ Run the following commands in your Node-RED user directory - typically `~/.node-
 
     sudo apt-get update
     sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
-    npm install annotate-canvas
+    npm install annotate-image-plus
 
 More information, and other platforms can be found here <a href="https://www.npmjs.com/package/canvas" target="_blank">Canvas</a>
 

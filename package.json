@@ -1,12 +1,12 @@
 {
-    "name": "annotate-canvas",
+    "name": "annotate-image-plus",
     "version": "0.0.1",
     "description": "A Node-RED node that can annotate an image",
     "dependencies": {},
     "repository": {
         "type": "git",
-        "url": "https://github.com/smcgann99/annotate-canvas.git",
-        "directory": "tree/master/annotate-canvas"
+        "url": "https://github.com/smcgann99/annotate-image-plus.git",
+        "directory": "tree/master/annotate-image-plus"
     },
     "license": "Apache-2.0",
     "keywords": [
@@ -14,7 +14,7 @@
     ],
     "node-red": {
         "nodes": {
-            "annotate-canvas": "annotate-canvas.js"
+            "annotate-image-plus": "annotate-image-plus.js"
         }
     },
     "author": "S McGann",

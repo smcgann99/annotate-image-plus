@@ -1,4 +1,4 @@
-<script type="text/html" data-template-name="annotate-canvas">
+<script type="text/html" data-template-name="annotate-image-plus">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -67,7 +67,7 @@
         colorPalette.push('#'+'000000'.slice(0, 6-s.length)+s);
     }
 
-    RED.nodes.registerType('annotate-canvas',{
+    RED.nodes.registerType('annotate-image-plus',{
         category: 'utility',
         color:"#f1c2f0",
         defaults: {
