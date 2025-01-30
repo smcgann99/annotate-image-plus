@@ -1,28 +1,49 @@
-annotate-canvas
-==================
+node-red-annotate-image-ultimate
+================================
 
-A node that can annotate JPEG, PNG or GIF images.
+A <a href="http://nodered.org" target="_new">Node-RED</a> node that can annotate JPEG, PNG or GIF images.
 
-The node is currently limited to drawing rectangles and circles over the image.
+The node can draw rectangles and circles, along with text over the image.
 That can be used, for example, to annotate an image with bounding boxes of features
 detected in the image by a TensorFlow node.
 
-Install
--------
+This node is based on the original node-red-node-annotate-image, and should be a drop in replacement for that node.
+
+**Extra Features**
+
+ * Canvas library typically renders 20 to 40 times faster.
+ * Supports more image types - *JPEG, PNG, GIF, BMP, TIFF* 
+ * Background box behind labels makes them easier to read.
+ * Automatic line width, adjusts to different resolutions.
+ * Automatic font size, scales to fit bounding box width.
+ * Improved automatic label positioning, based on available space.
+
+Prerequisite
+------------
 
 This node requires the canvas package, which must be installed first.
+
+For Ubuntu / Debian eg Raspberry Pi
 Run the following commands in your Node-RED user directory - typically `~/.node-red`
 
-For Debian  
 sudo apt-get update
 sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 npm install annotate-canvas
 
+More information can be found here <a href="https://www.npmjs.com/package/canvas" target="_new">Canvas</a>
+
+
+Install
+-------
+
+Either use the Edit Menu - Manage Palette option to install, or run the following command in your Node-RED user directory - typically `~/.node-red`
+
+    npm install node-red-node-annotate-image
 
 Usage
 -----
 
-The JPEG, PNG or GIF image should be passed to the node as a Buffer object under the configured property, default = `msg.payload`.
+The image should be passed to the node as a Buffer object in the configured property, default = `msg.payload`.
 
 The annotations are provided in <code>msg.annotations</code> and are applied in order.
 
@@ -39,8 +60,10 @@ Each annotation is an object with the following properties:
  - `stroke` (*string*) : the line color of the annotation. Default: `#ffC000`
  - `lineWidth` (*number*) : the stroke width used to draw the annotation. `Automatic if not provided`
  - `fontSize` (*number*) : the font size to use for the label. `Automatic if not provided`
- - `fontColor` (*string*) : the color of the font to use for the label. Default: `#ffC000`
- - `labelLocation` (*string*) : The location to place the label. `top` or `bottom`.
+ - `minFontSize` (*number*) : if fontSize is Automatic, this is the smallest font size to use. Default: `10`
+ - `fontColor` (*string*) : the color of the text used for the label. Default: `#ff0000`
+ - `textBackground` (*string*) : the background color of the text box. Default: `#ffffff`
+ - `labelLocation` (*string*) : the location to place the label. `top` or `bottom`.
     If this property is not set it will default to `automatic` and place where there is more room.
 
 
@@ -51,7 +74,8 @@ Examples
 msg.annotations = [ {
     type: "rect",
     x: 10, y: 10, w: 50, h: 50,
-    label: "hello"
+    label: "hello",
+    textBackground:"#ffffff"
 }]
 ```
 ```javascript
