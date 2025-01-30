@@ -1,0 +1,158 @@
+[
+    {
+        "id": "b94029ef5cbbd1b2",
+        "type": "inject",
+        "z": "055c98606c931f5b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 200,
+        "wires": [
+            [
+                "d8b5f66ae7fe9fca"
+            ]
+        ]
+    },
+    {
+        "id": "d8b5f66ae7fe9fca",
+        "type": "http request",
+        "z": "055c98606c931f5b",
+        "name": "",
+        "method": "GET",
+        "ret": "bin",
+        "paytoqs": "ignore",
+        "url": "https://www.grunge.com/img/gallery/why-its-finally-time-to-cancel-the-big-bang-theory/-1483023960.jpg",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 390,
+        "y": 200,
+        "wires": [
+            [
+                "ca5f13288329c404"
+            ]
+        ]
+    },
+    {
+        "id": "ca5f13288329c404",
+        "type": "change",
+        "z": "055c98606c931f5b",
+        "name": "Add Annotations",
+        "rules": [
+            {
+                "t": "set",
+                "p": "annotations",
+                "pt": "msg",
+                "to": "[{\"type\":\"rect\",\"x\":328.1650629043579,\"y\":26.98061304092407,\"w\":48.30702781677246,\"h\":69.14413487911226,\"label\":\"Sheldon 95%\",\"labelLocation\":\"top\",\"fontColor\":\"#0000ff\"},{\"type\":\"rect\",\"x\":465.6891059875488,\"y\":50.93273027539253,\"w\":47.93747520446777,\"h\":67.21298364400863,\"label\":\"Raj 90%\",\"stroke\":\"#9363b7\",\"fontColor\":\"#000000\",\"textBackground\":\"#bfdbef\",\"lineWidth\":5},{\"type\":\"rect\",\"x\":244.48601818084717,\"y\":51.76605024337769,\"w\":43.43518924713135,\"h\":59.093867301940904,\"label\":\"Penny 97%\"},{\"type\":\"rect\",\"x\":135.44995880126953,\"y\":81.36984618306161,\"w\":48.41507434844971,\"h\":52.50926607847214,\"label\":\"Howard 81%\",\"stroke\":\"#ff0000\"},{\"type\":\"rect\",\"x\":560.1568665504456,\"y\":72.44488201737403,\"w\":64.55302333831787,\"h\":66.89452761411667,\"label\":\"Leonard 91%\",\"fontSize\":30}]",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "lastnode",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 580,
+        "y": 200,
+        "wires": [
+            [
+                "924630c40a31534c"
+            ]
+        ]
+    },
+    {
+        "id": "924630c40a31534c",
+        "type": "annotate-canvas",
+        "z": "055c98606c931f5b",
+        "name": "",
+        "stroke": "#0070c0",
+        "lineWidth": "",
+        "fontSize": "",
+        "fontColor": "#ff0000",
+        "textBackground": "#ffffff",
+        "minFontSize": "",
+        "data": "payload",
+        "dataType": "msg",
+        "x": 780,
+        "y": 200,
+        "wires": [
+            [
+                "d38684f9c57887a5"
+            ]
+        ]
+    },
+    {
+        "id": "d38684f9c57887a5",
+        "type": "function",
+        "z": "055c98606c931f5b",
+        "name": "elapsed",
+        "func": "const now = Date.now();\n\nconst lastSeconds = now - msg.lastnode.toFixed(5);\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"dot\",\n    text: `${lastSeconds} ms `\n});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 905,
+        "y": 200,
+        "wires": [
+            [
+                "d5eb67361f481ffc"
+            ]
+        ],
+        "icon": "node-red/timer.svg",
+        "l": false
+    },
+    {
+        "id": "d5eb67361f481ffc",
+        "type": "debug",
+        "z": "055c98606c931f5b",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "37443966840d2a6a",
+        "type": "comment",
+        "z": "055c98606c931f5b",
+        "name": "Install node-red-contrib-image-output instead of debug to see the output",
+        "info": "https://flows.nodered.org/node/node-red-contrib-image-output",
+        "x": 610,
+        "y": 140,
+        "wires": []
+    }
+]
