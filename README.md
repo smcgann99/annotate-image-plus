@@ -27,10 +27,13 @@ For Ubuntu / Debian e.g. Raspberry Pi
 
 Run the following commands in your Node-RED user directory - typically `~/.node-red`
 
-  ```  sudo apt-get update ```
 
-  ```  sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev ```
-
+```bash
+sudo apt-get update
+```
+```bash
+sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev    
+```
 More information, and other platforms can be found here <a href="https://www.npmjs.com/package/canvas" target="_blank">Canvas</a>
 
 
