@@ -1,7 +1,7 @@
 node-red-annotate-image-ultimate
 ================================
 
-A <a href="http://nodered.org" target="_new">Node-RED</a> node that can annotate JPEG, PNG or GIF images.
+A <a href="http://nodered.org" target="_blank">Node-RED</a> node that can annotate JPEG, PNG or GIF images.
 
 The node can draw rectangles and circles, along with text over the image.
 That can be used, for example, to annotate an image with bounding boxes of features
@@ -23,14 +23,17 @@ Prerequisite
 
 This node requires the canvas package, which must be installed first.
 
-For Ubuntu / Debian eg Raspberry Pi
+For Ubuntu / Debian e.g. Raspberry Pi
+
 Run the following commands in your Node-RED user directory - typically `~/.node-red`
 
+<code>
 sudo apt-get update
 sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 npm install annotate-canvas
+</code>
 
-More information can be found here <a href="https://www.npmjs.com/package/canvas" target="_new">Canvas</a>
+More information can be found here <a href="https://www.npmjs.com/package/canvas" target="_blank">Canvas</a>
 
 
 Install
@@ -64,7 +67,7 @@ Each annotation is an object with the following properties:
  - `fontColor` (*string*) : the color of the text used for the label. Default: `#ff0000`
  - `textBackground` (*string*) : the background color of the text box. Default: `#ffffff`
  - `labelLocation` (*string*) : the location to place the label. `top` or `bottom`.
-    If this property is not set it will default to `automatic` and place where there is more room.
+   If this property is not set it will default to `automatic` and place where there is more room.
 
 
 Examples
