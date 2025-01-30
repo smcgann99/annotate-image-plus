@@ -1,4 +1,4 @@
-annotate-image-plus
+node-red-annotate-image-plus
 ================================
 
 A <a href="http://nodered.org" target="_blank">Node-RED</a> node that can annotate JPEG, PNG or GIF images.
@@ -18,10 +18,10 @@ This node is based on the original node-red-node-annotate-image, and should be a
  * Automatic font size, scales to fit bounding box width.
  * Improved automatic label positioning, based on available space.
 
-Prerequisite
-------------
+Pre-requisites
+--------------
 
-This node requires the canvas package, which must be installed first.
+This node requires build tools for the canvas package, which must be installed first.
 
 For Ubuntu / Debian e.g. Raspberry Pi
 
@@ -29,7 +29,6 @@ Run the following commands in your Node-RED user directory - typically `~/.node-
 
     sudo apt-get update
     sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
-    npm install annotate-image-plus
 
 More information, and other platforms can be found here <a href="https://www.npmjs.com/package/canvas" target="_blank">Canvas</a>
 
@@ -39,7 +38,8 @@ Install
 
 Either use the Edit Menu - Manage Palette option to install, or run the following command in your Node-RED user directory - typically `~/.node-red`
 
-    npm install annotate-image-plus
+    npm install @smcgann99/node-red-annotate-image-plus
+
 
 Usage
 -----
