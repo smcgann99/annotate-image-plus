@@ -2,7 +2,19 @@
     "name": "annotate-image-plus",
     "version": "0.0.1",
     "description": "A Node-RED node that can annotate an image",
-    "dependencies": {},
+    "dependencies": {
+        "node-red": ">=4.0.0"
+    },
+    "peerDependencies": {
+        "canvas": ">=3.1.0"
+    },
+    "engines": {
+    "node": "^18.12.0 || >= 20.9.0"
+  },
+    
+  "bugs": {
+    "url": "https://github.com/smcgann99/annotate-image-plus/issues"
+  },
     "repository": {
         "type": "git",
         "url": "https://github.com/smcgann99/annotate-image-plus.git",
@@ -13,6 +25,7 @@
         "node-red"
     ],
     "node-red": {
+        "version": ">=4.0.0",
         "nodes": {
             "annotate-image-plus": "annotate-image-plus.js"
         }

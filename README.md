@@ -1,4 +1,4 @@
-node-red annotate-image-plus
+annotate-image-plus
 ================================
 
 A <a href="http://nodered.org" target="_blank">Node-RED</a> node that can annotate JPEG, PNG or GIF images.
@@ -39,7 +39,7 @@ Install
 
 Either use the Edit Menu - Manage Palette option to install, or run the following command in your Node-RED user directory - typically `~/.node-red`
 
-    npm install node-red-node-annotate-image
+    npm install annotate-image-plus
 
 Usage
 -----
