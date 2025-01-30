@@ -27,9 +27,9 @@ For Ubuntu / Debian e.g. Raspberry Pi
 
 Run the following commands in your Node-RED user directory - typically `~/.node-red`
 
-<code>sudo apt-get update
-sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
-npm install annotate-canvas</code>
+    sudo apt-get update
+    sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+    npm install annotate-canvas
 
 More information can be found here <a href="https://www.npmjs.com/package/canvas" target="_blank">Canvas</a>
 
