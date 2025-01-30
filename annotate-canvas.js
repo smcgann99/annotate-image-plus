@@ -12,10 +12,14 @@ module.exports = function(RED) {
     }
 
     function calculateLineWidth(height) {
-        const referenceHeight = 700;
-        const referenceWidth = 14;
-        let width = Math.round((height / referenceHeight) * referenceWidth);
-        return Math.max(width, 1);
+        return Math.max(Math.round(height * 0.03), 1);
+    }
+
+    function calculateFontSize(ctx, text, maxWidth, defaultMinFontSize) {
+        ctx.font = `${defaultMinFontSize}px 'Source Sans Pro'`;
+        const textWidth = ctx.measureText(text).width;
+        const scaleFactor = maxWidth / textWidth;
+        return Math.ceil(Math.max(defaultMinFontSize * scaleFactor, defaultMinFontSize));
     }
 
     function AnnotateNode(config) {
@@ -49,25 +53,17 @@ module.exports = function(RED) {
                         ctx.drawImage(img, 0, 0);
                         ctx.lineJoin = 'bevel';
                         ctx.textBaseline = "middle";
-                        
 
                         const annotationPromises = msg.annotations.map(async function(annotation) {
                             let x, y, r, w, h, textX, textY, fontSize;
                             annotation.fontSize = annotation.fontSize || config.fontSize;
-                            annotation.minFontSize = annotation.minFontSize || defaultMinFontSize;
                             annotation.textBackground = annotation.textBackground || defaultTextBackground;
                             annotation.lineWidth = annotation.lineWidth || config.lineWidth;
                             annotation.fontColor = annotation.fontColor || defaultFontColor;
+                            annotation.stroke = annotation.stroke || defaultStroke;
 
                             if (!annotation.type && annotation.bbox) {
                                 annotation.type = 'rect';
-                            }
-
-                            function calculateFontSize(text, maxWidth) {
-                                ctx.font = `${defaultMinFontSize}px 'Source Sans Pro'`;
-                                const textWidth = ctx.measureText(text).width;
-                                const scaleFactor = maxWidth / textWidth;
-                                return Math.ceil(Math.max(defaultMinFontSize * scaleFactor, defaultMinFontSize));
                             }
 
                             switch (annotation.type) {
@@ -96,10 +92,9 @@ module.exports = function(RED) {
                                     ctx.strokeStyle = annotation.stroke || defaultStroke;
                                     ctx.lineWidth = annotation.lineWidth || calculateLineWidth(h);
                                     ctx.stroke();
-                                    
 
                                     if (annotation.label) {
-                                        fontSize = annotation.fontSize || calculateFontSize(annotation.label, w);
+                                        fontSize = annotation.fontSize || calculateFontSize(ctx, annotation.label, w, defaultMinFontSize);
                                         ctx.font = `${fontSize}px 'Source Sans Pro'`;
                                         
                                         if (annotation.labelLocation) {
@@ -115,7 +110,7 @@ module.exports = function(RED) {
                                         ctx.fillStyle = annotation.textBackground; // Set background color
                                         ctx.fillRect(x, textY - fontSize, ctx.measureText(annotation.label).width, fontSize); // Draw background rectangle
                                         ctx.fillStyle = annotation.fontColor; // Set text color
-                                        textY = textY - fontSize + fontSize / 2;
+                                        textY = textY - fontSize + fontSize / 2; // Center text vertically
                                         ctx.fillText(annotation.label, x, textY); // Draw text
                                     }
                                     break;
@@ -136,7 +131,7 @@ module.exports = function(RED) {
                                     ctx.stroke();
 
                                     if (annotation.label) {
-                                        fontSize = annotation.fontSize || calculateFontSize(annotation.label, 2 * r, annotation.minFontSize);
+                                        fontSize = annotation.fontSize || calculateFontSize(ctx, annotation.label, 2 * r, defaultMinFontSize);
                                         ctx.font = `${fontSize}px 'Source Sans Pro'`;
                                         
                                         if (annotation.labelLocation) {
@@ -152,7 +147,7 @@ module.exports = function(RED) {
                                         ctx.fillStyle = annotation.textBackground; // Set background color
                                         ctx.fillRect(x - r, textY - fontSize, ctx.measureText(annotation.label).width, fontSize); // Draw background rectangle
                                         ctx.fillStyle = annotation.fontColor; // Set text color
-                                        textY = textY - fontSize + fontSize / 2;
+                                        textY = textY - fontSize + fontSize / 2; // Center text vertically
                                         ctx.fillText(annotation.label, x-r, textY); // Draw text
                                     }
                                     break;
@@ -174,8 +169,6 @@ module.exports = function(RED) {
                 handleError(new Error("Input is not a buffer"), msg, "Invalid input");
             }
         });
-
-            
 
         function handleError(err, msg, errorText, originalPayload = null) {
             node.error(err,errorText, msg);

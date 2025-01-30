@@ -31,7 +31,7 @@ Run the following commands in your Node-RED user directory - typically `~/.node-
     sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
     npm install annotate-canvas
 
-More information can be found here <a href="https://www.npmjs.com/package/canvas" target="_blank">Canvas</a>
+More information, and other platforms can be found here <a href="https://www.npmjs.com/package/canvas" target="_blank">Canvas</a>
 
 
 Install
@@ -61,7 +61,6 @@ Each annotation is an object with the following properties:
  - `stroke` (*string*) : the line color of the annotation. Default: `#ffC000`
  - `lineWidth` (*number*) : the stroke width used to draw the annotation. `Automatic if not provided`
  - `fontSize` (*number*) : the font size to use for the label. `Automatic if not provided`
- - `minFontSize` (*number*) : if fontSize is Automatic, this is the smallest font size to use. Default: `10`
  - `fontColor` (*string*) : the color of the text used for the label. Default: `#ff0000`
  - `textBackground` (*string*) : the background color of the text box. Default: `#ffffff`
  - `labelLocation` (*string*) : the location to place the label. `top` or `bottom`.
