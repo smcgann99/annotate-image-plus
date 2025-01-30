@@ -119,7 +119,11 @@ module.exports = function(RED) {
                                         x = annotation.bbox[0] + annotation.bbox[2] / 2;
                                         y = annotation.bbox[1] + annotation.bbox[3] / 2;
                                         r = Math.min(annotation.bbox[2], annotation.bbox[3]) / 2;
-                                    } else {
+                                    } else if (!annotation.r){
+                                        x = annotation.x + annotation.w / 2;
+                                        y = annotation.y + annotation.h / 2;
+                                        r = Math.min(annotation.x, annotation.y) / 2;
+                                    }else {
                                         x = annotation.x;
                                         y = annotation.y;
                                         r = annotation.r;
