@@ -1,4 +1,4 @@
-node-red-annotate-image-plus
+@smcgann99/node-red-annotate-image-plus
 ================================
 
 A <a href="http://nodered.org" target="_blank">Node-RED</a> node that can annotate JPEG, PNG or GIF images.
@@ -12,7 +12,8 @@ This node is based on the original node-red-node-annotate-image, and should be a
 **Extra Features**
 
  * Canvas library typically renders 20 to 40 times faster.
- * Supports more image types - *JPEG, PNG, GIF, BMP, TIFF* 
+ * Supports more image types - *JPEG, PNG, GIF*
+ * Output is converted to jpeg for better compatibility 
  * Background box behind labels makes them easier to read.
  * Automatic line width, adjusts to different resolutions.
  * Automatic font size, scales to fit bounding box width.
