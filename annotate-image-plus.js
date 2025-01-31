@@ -184,5 +184,5 @@ module.exports = function(RED) {
         }
     }
 
-    RED.nodes.registerType("node-red-annotate-image-plus", AnnotateNode);
+    RED.nodes.registerType("annotate-image-plus", AnnotateNode);
 };
