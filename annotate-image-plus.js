@@ -19,6 +19,7 @@ module.exports = function(RED) {
         ctx.font = `${defaultMinFontSize}px 'Source Sans Pro'`;
         const textWidth = ctx.measureText(text).width;
         const scaleFactor = maxWidth / textWidth;
+        node.warn(Math.ceil(Math.max(defaultMinFontSize * scaleFactor, defaultMinFontSize)))
         return Math.ceil(Math.max(defaultMinFontSize * scaleFactor, defaultMinFontSize));
     }
 
