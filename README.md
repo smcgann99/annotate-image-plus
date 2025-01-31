@@ -66,7 +66,7 @@ Each annotation is an object with the following properties:
  - `stroke` (*string*) : the line color of the annotation. Default: `#ffC000`
  - `lineWidth` (*number*) : the stroke width used to draw the annotation. `Automatic if not provided`
  - `fontSize` (*number*) : the font size to use for the label. `Automatic if not provided`
- - `fontColor` (*string*) : the color of the text used for the label. Default: `#ff0000`
+ - `fontColor` (*string*) : the color of the text used for the label. Default: `#ffC000`
  - `textBackground` (*string*) : the background color of the text box. Default: `#ffffff`
  - `labelLocation` (*string*) : the location to place the label. `top` or `bottom`.
    If this property is not set it will default to `automatic` and place where there is more room.
