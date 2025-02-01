@@ -62,7 +62,7 @@ Each annotation is an object which can contain the following properties:
  - `r` (*number*) : the radius of a `circle` annotation
  - `bbox` (*array*) : this can be used instead of `x`, `y`, `w`, `h` and `r`.
    It should be an array of four values giving the bounding box of the annotation:
-   `[x, y, w, h]`. If this property is set and `type` is not set, it will default to `rect`.
+   `[x, y, w, h]`.
  - `label` (*string*) : an optional piece of text to label the annotation with
  - `stroke` (*string*) : the line color of the annotation. Default: `#ffC000`
  - `lineWidth` (*number*) : the stroke width used to draw the annotation. `Automatic if not provided`
