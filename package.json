@@ -1,0 +1,38 @@
+{
+    "name": "@smcgann/node-red-annotate-image-plus",
+    "version": "0.0.1",
+    "description": "A Node-RED node that can annotate an image",
+    "dependencies": {
+        "canvas": ">=3.1.0"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "bugs": {
+        "url": "https://github.com/smcgann99/node-red-annotate-image-plus/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/smcgann99/node-red-annotate-image-plus.git",
+        "directory": "tree/master/node-red-annotate-image-plus"
+    },
+    "license": "Apache-2.0",
+    "keywords": [
+        "node-red"
+    ],
+    "node-red": {
+        "version": ">=4.0.0",
+        "nodes": {
+            "annotate-image-plus": "annotate-image-plus.js"
+        }
+    },
+    "author": "S McGann",
+    "contributors": [
+        {
+            "name": "S McGann"
+        },
+        {
+            "name": "Nick O'Leary"
+        }
+    ]
+}
