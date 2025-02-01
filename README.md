@@ -12,12 +12,13 @@ This node is based on the original node-red-node-annotate-image, and should be a
 **Extra Features**
 
  * Canvas library typically renders 20 to 40 times faster.
- * Supports more image types - *JPEG, PNG, GIF*
- * Output is converted to jpeg for better compatibility 
+ * Supports more image types - *JPEG, PNG, GIF*.
+ * Output is converted to jpeg for better compatibility.
  * Background box behind labels makes them easier to read.
  * Automatic line width, adjusts to different resolutions.
  * Automatic font size, scales to fit bounding box width.
  * Improved automatic label positioning, based on available space.
+ * Improved error checking for invalid annotation input.
 
 Pre-requisites
 --------------
@@ -51,11 +52,11 @@ Usage
 
 The image should be passed to the node as a Buffer object in the configured property, default = `msg.payload`.
 
-The annotations are provided in <code>msg.annotations</code> and are applied in order.
+The annotations are provided in <code>msg.annotations</code> and override those set in the node config.
 
-Each annotation is an object with the following properties:
+Each annotation is an object which can contain the following properties:
 
- - `type` (*string*) : the type of the annotation - `rect` or `circle`
+ - `type` (*string*) : the type of the annotation - `rect` or `circle` Default: `rect`
  - `x`/`y` (*number*) : the top-left corner of a `rect` annotation, or the center of a `circle` annotation.
  - `w`/`h` (*number*) : the width and height of a `rect` annotation
  - `r` (*number*) : the radius of a `circle` annotation
@@ -71,6 +72,10 @@ Each annotation is an object with the following properties:
  - `labelLocation` (*string*) : the location to place the label. `top` or `bottom`.
    If this property is not set it will default to `automatic` and place where there is more room.
 
+**You must provide at least x,y,w,h or bbox other missing values will use defaults.**
+
+**You can select circle without providing r, as long as x,y,w,h or bbox are set.**
+
 
 Examples
 --------
@@ -80,7 +85,7 @@ msg.annotations = [ {
     type: "rect",
     x: 10, y: 10, w: 50, h: 50,
     label: "hello",
-    textBackground:"#ffffff"
+    textBackground:"#00ffff"
 }]
 ```
 ```javascript

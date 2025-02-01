@@ -87,7 +87,7 @@ module.exports = function (RED) {
                             annotation.fontColor = annotation.fontColor || defaultFontColor;
                             annotation.stroke = annotation.stroke || defaultStroke;
 
-                            if (!annotation.type && annotation.bbox) {
+                            if (!annotation.type) {
                                 annotation.type = 'rect';
                             }
 
@@ -112,6 +112,10 @@ module.exports = function (RED) {
                                         h += y;
                                         y = 0;
                                     }
+                                    if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(w) || !Number.isFinite(h)) {
+                                        node.warn(`Invalid rectangle annotation: ${JSON.stringify(annotation)}`);
+                                        return;
+                                    }
                                     ctx.beginPath();
                                     ctx.rect(x, y, w, h);
                                     ctx.strokeStyle = annotation.stroke || defaultStroke;
@@ -135,6 +139,10 @@ module.exports = function (RED) {
                                         x = annotation.x;
                                         y = annotation.y;
                                         r = annotation.r;
+                                    }
+                                    if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(r)) {
+                                        node.warn(`Invalid circle annotation: ${JSON.stringify(annotation)}`);
+                                        return;
                                     }
                                     ctx.beginPath();
                                     ctx.arc(x, y, r, 0, Math.PI * 2);
