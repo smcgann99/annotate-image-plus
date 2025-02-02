@@ -1,7 +1,5 @@
 
-[![Min Node Version](https://img.shields.io/node/v/%40smcgann%2Fnode-red-annotate-image-plus)](https://www.npmjs.com/package/node-red-annotate-image-plus)
-
-
+[![Min Node Version](https://img.shields.io/node/v/%40smcgann%2Fnode-red-annotate-image-plus)](https://www.npmjs.com/package/%40smcgann%2Fnode-red-annotate-image-plus)
 
 
 @smcgann/node-red-annotate-image-plus
