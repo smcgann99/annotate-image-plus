@@ -1,3 +1,9 @@
+
+[![Min Node Version](https://img.shields.io/node/v/%40smcgann%2Fnode-red-annotate-image-plus)](https://www.npmjs.com/package/node-red-annotate-image-plus)
+
+
+
+
 @smcgann/node-red-annotate-image-plus
 ================================
 
@@ -23,9 +29,16 @@ This node is based on the original node-red-node-annotate-image, and should be a
 Pre-requisites
 --------------
 
-This node requires build tools for the canvas package, which must be installed first.
+This node requires the canvas package. By default, pre-built binaries will be downloaded if you're on one of the following platforms:
 
-For Ubuntu / Debian e.g. Raspberry Pi
+* macOS x86/64
+* macOS aarch64 (aka Apple silicon)
+* Linux x86/64 (glibc only)
+* Windows x86/64
+
+If you don't have a supported OS or processor architecture, then it requires build tools, which must be installed first.
+
+For Ubuntu / Debian e.g. **Raspberry Pi**
 
 Run the following commands in your Node-RED user directory - typically `~/.node-red`
 
@@ -36,7 +49,7 @@ sudo apt-get update
 ```bash
 sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev    
 ```
-More information, and other platforms can be found here <a href="https://www.npmjs.com/package/canvas" target="_blank">Canvas</a>
+More information, and details for other platforms can be found here <a href="https://www.npmjs.com/package/canvas" target="_blank">Canvas</a>
 
 
 Install

@@ -6,7 +6,7 @@
         "canvas": ">=3.1.0"
     },
     "engines": {
-        "node": ">=18"
+        "node": ">=18.12.0"
     },
     "bugs": {
         "url": "https://github.com/smcgann99/node-red-annotate-image-plus/issues"
