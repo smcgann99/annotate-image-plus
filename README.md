@@ -100,7 +100,9 @@ msg.annotations = [ {
     type: "rect",
     x: 10, y: 10, w: 50, h: 50,
     label: "hello",
-    textBackground:"#00ffff"
+    textBackground:"#00ffff",
+    stroke: "#0000ff",
+    strokeOpacity: 0.5
 }]
 ```
 ```javascript
