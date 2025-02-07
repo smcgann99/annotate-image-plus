@@ -82,11 +82,11 @@ Each annotation is an object which can contain the following properties:
    It should be an array of four values giving the bounding box of the annotation: `[x, y, w, h]`.
  - `label` (*string*) : an optional piece of text to label the annotation with.
  - `stroke` (*string*) : the line color of the annotation. Default: `config Line Color`.
- - `strokeOpacity` (*number*) : opacity of the line `1-100`. Default: `100` or `config Line Color` if stroke not provided.
+ - `strokeOpacity` (*number*) : opacity of the line `0-1`. Default: `1` or `config Line Color` if stroke not provided.
  - `fontColor` (*string*) : the color of the text used for the label. Default: `config Font Color`.
- - `fontColorOpacity` (*number*) : opacity of the text `1-100`. Default: `100` or `config Font Color` if fontColor not provided.
+ - `fontColorOpacity` (*number*) : opacity of the text `0-1`. Default: `1` or `config Font Color` if fontColor not provided.
  - `textBackground` (*string*) : the background color of the text box. Default: `config Background`.
- - `textBackgroundOpacity` (*number*) : opacity of the text box `1-100`. Default: `100` or `config Background` if textBackground not provided.
+ - `textBackgroundOpacity` (*number*) : opacity of the text box `0-1`. Default: `1` or `config Background` if textBackground not provided.
  - `lineWidth` (*number*) : the stroke width used to draw the annotation. `Automatic if not provided`.
  - `fontSize` (*number*) : the font size to use for the label. `Automatic if not provided`.
  - `labelLocation` (*string*) : the location to place the label, `top` or `bottom`.

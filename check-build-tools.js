@@ -25,6 +25,7 @@ if (os.arch().startsWith('arm')) {
     if (missingPackages.length > 0) {
         console.error('Error: The following required build tools are missing:');
         missingPackages.forEach(packageName => console.error(`  - ${packageName}`));
-        process.exit(1);
+        console.error('Please check the readme for details!');
+        process.exitCode = 1;
     }
-} 
+}
