@@ -1,6 +1,6 @@
 [![Min Node Version](https://img.shields.io/node/v/%40smcgann%2Fnode-red-annotate-image-plus)](https://www.npmjs.com/package/%40smcgann%2Fnode-red-annotate-image-plus)
 [![Dependencies](https://img.shields.io/npm/dependency-version/%40smcgann%2Fnode-red-annotate-image-plus/canvas)](https://www.npmjs.com/package/canvas)
-[![GitHub license](https://img.shields.io/npm/l/%40smcgann%2Fnode-red-annotate-image-plus)]
+![GitHub license](https://img.shields.io/npm/l/%40smcgann%2Fnode-red-annotate-image-plus)
 
 @smcgann/node-red-annotate-image-plus
 ================================
