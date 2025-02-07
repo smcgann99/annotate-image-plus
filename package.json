@@ -1,6 +1,6 @@
 {
     "name": "@smcgann/node-red-annotate-image-plus",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "A Node-RED node that can annotate an image",
     "dependencies": {
         "canvas": ">=3.1.0"
@@ -34,5 +34,8 @@
         {
             "name": "Nick O'Leary"
         }
-    ]
+    ],
+    "scripts": {
+        "preinstall": "node check-build-tools.js"
+    }
 }

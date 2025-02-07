@@ -9,19 +9,22 @@ function loadFont() {
     }
 }
 
+// Calculate line width based on image height
 function calculateLineWidth(height) {
     return Math.max(Math.round(height * 0.03), 1);
 }
 
-function calculateFontSize(ctx, text, maxWidth, defaultMinFontSize) {
-    ctx.font = `${defaultMinFontSize}px 'Source Sans Pro'`;
+// Calculate font size based on text width and maximum width
+function calculateFontSize(ctx, text, maxWidth, minFontSize) {
+    ctx.font = `${minFontSize}px 'Source Sans Pro'`;
     const textWidth = ctx.measureText(text).width;
     const scaleFactor = maxWidth / textWidth;
-    return Math.ceil(Math.max(defaultMinFontSize * scaleFactor, defaultMinFontSize));
+    return Math.ceil(Math.max(minFontSize * scaleFactor, minFontSize));
 }
 
-function drawLabel(ctx, annotation, x, y, w, h, imgHeight, defaultMinFontSize) {
-    const fontSize = annotation.fontSize || calculateFontSize(ctx, annotation.label, w, defaultMinFontSize);
+// Draw label with background and text
+function drawLabel(ctx, annotation, x, y, w, h, imgHeight, minFontSize) {
+    const fontSize = annotation.fontSize || calculateFontSize(ctx, annotation.label, w, minFontSize);
     ctx.font = `${fontSize}px 'Source Sans Pro'`;
     const gap = Math.round(0.2 * fontSize);
 
@@ -39,9 +42,29 @@ function drawLabel(ctx, annotation, x, y, w, h, imgHeight, defaultMinFontSize) {
     }
 
     ctx.fillStyle = annotation.textBackground; // Set background color
+    ctx.globalAlpha = annotation.textBackgroundOpacity; // Set background opacity
     ctx.fillRect(x, textY, ctx.measureText(annotation.label).width, fontSize); // Draw background rectangle
     ctx.fillStyle = annotation.fontColor; // Set text color
+    ctx.globalAlpha = annotation.fontColorOpacity; // Set text opacity
     ctx.fillText(annotation.label, x, textY + fontSize - fontSize / 2); // Draw text
+}
+
+// Validate hex color format
+function validateHexColor(value) {
+    const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+    return hexColorRegex.test(value);
+}
+
+// Validate opacity value
+function validateOpacity(value) {
+    const num = parseFloat(value);
+    return !isNaN(num) && num >= 0 && num <= 1;
+}
+
+// Validate number value
+function validateNumber(value) {
+    const num = parseFloat(value);
+    return !isNaN(num) && Number.isFinite(num);
 }
 
 module.exports = function (RED) {
@@ -52,10 +75,18 @@ module.exports = function (RED) {
         this.data = config.data || "";
         this.dataType = config.dataType || "msg";
         var node = this;
-        const defaultStroke = config.stroke || "#ffC000";
-        const defaultMinFontSize = config.minFontSize || 10;
-        const defaultFontColor = config.fontColor || "#ffC000";
-        const defaultTextBackground = config.textBackground || "#ffffff";
+
+        const stroke = config.stroke || "#ffC000";
+        const strokeOpacity = config["stroke-opacity"] || 1;
+
+        const fontColor = config.fontColor || "#ff0000";
+        const fontColorOpacity = config["fontColor-opacity"] || 1;
+
+        const textBackground = config.textBackground || "#ffffff";
+        const textBackgroundOpacity = config["textBackground-opacity"] || 1;
+
+        const minFontSize = config.minFontSize || 10;
+
         let input = null;
         loadFont();
 
@@ -81,14 +112,43 @@ module.exports = function (RED) {
 
                         const annotationPromises = msg.annotations.map(async function (annotation) {
                             let x, y, r, w, h;
+                            annotation.type = annotation.type || 'rect';
                             annotation.fontSize = annotation.fontSize || config.fontSize;
-                            annotation.textBackground = annotation.textBackground || defaultTextBackground;
                             annotation.lineWidth = annotation.lineWidth || config.lineWidth;
-                            annotation.fontColor = annotation.fontColor || defaultFontColor;
-                            annotation.stroke = annotation.stroke || defaultStroke;
 
-                            if (!annotation.type) {
-                                annotation.type = 'rect';
+                            if (!annotation.textBackground) {
+                                annotation.textBackground = textBackground;
+                                annotation.textBackgroundOpacity = textBackgroundOpacity;
+                            } else {
+                                annotation.textBackgroundOpacity = annotation.textBackgroundOpacity || 1;
+                            }
+
+                            if (!annotation.fontColor) {
+                                annotation.fontColor = fontColor;
+                                annotation.fontColorOpacity = fontColorOpacity;
+                            } else {
+                                annotation.fontColorOpacity = annotation.fontColorOpacity || 1;
+                            }
+
+                            if (!annotation.stroke) {
+                                annotation.stroke = stroke;
+                                annotation.strokeOpacity = strokeOpacity;
+                            } else {
+                                annotation.strokeOpacity = annotation.strokeOpacity || 1;
+                            }
+
+                            if (!validateHexColor(annotation.fontColor) ||
+                                !validateHexColor(annotation.textBackground) ||
+                                !validateHexColor(annotation.stroke)) {
+                                node.warn({ "invalid color": { ...annotation } });
+                                return;
+                            }
+
+                            if (!validateOpacity(annotation.textBackgroundOpacity) ||
+                                !validateOpacity(annotation.fontColorOpacity) ||
+                                !validateOpacity(annotation.strokeOpacity)) {
+                                node.warn({ "invalid opacity": { ...annotation } });
+                                return;
                             }
 
                             switch (annotation.type) {
@@ -112,18 +172,19 @@ module.exports = function (RED) {
                                         h += y;
                                         y = 0;
                                     }
-                                    if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(w) || !Number.isFinite(h)) {
-                                        node.warn(`Invalid rectangle annotation: ${JSON.stringify(annotation)}`);
+                                    if (!validateNumber(x) || !validateNumber(y) || !validateNumber(w) || !validateNumber(h)) {
+                                        node.warn({ "invalid co-ordinates": { ...annotation } });
                                         return;
                                     }
                                     ctx.beginPath();
                                     ctx.rect(x, y, w, h);
-                                    ctx.strokeStyle = annotation.stroke || defaultStroke;
+                                    ctx.strokeStyle = annotation.stroke;
+                                    ctx.globalAlpha = annotation.strokeOpacity;
                                     ctx.lineWidth = annotation.lineWidth || calculateLineWidth(h);
                                     ctx.stroke();
 
                                     if (annotation.label) {
-                                        drawLabel(ctx, annotation, x, y, w, h, img.height, defaultMinFontSize);
+                                        drawLabel(ctx, annotation, x, y, w, h, img.height, minFontSize);
                                     }
                                     break;
                                 case 'circle':
@@ -140,18 +201,19 @@ module.exports = function (RED) {
                                         y = annotation.y;
                                         r = annotation.r;
                                     }
-                                    if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(r)) {
-                                        node.warn(`Invalid circle annotation: ${JSON.stringify(annotation)}`);
+                                    if (!validateNumber(x) || !validateNumber(y) || !validateNumber(r)) {
+                                        node.warn({ "invalid co-ordinates": { ...annotation } });
                                         return;
                                     }
                                     ctx.beginPath();
                                     ctx.arc(x, y, r, 0, Math.PI * 2);
-                                    ctx.strokeStyle = annotation.stroke || defaultStroke;
+                                    ctx.strokeStyle = annotation.stroke;
+                                    ctx.globalAlpha = annotation.strokeOpacity;
                                     ctx.lineWidth = annotation.lineWidth || calculateLineWidth(r * 2);
                                     ctx.stroke();
 
                                     if (annotation.label) {
-                                        drawLabel(ctx, annotation, x - r, y - r, 2 * r, 2 * r, img.height, defaultMinFontSize);
+                                        drawLabel(ctx, annotation, x - r, y - r, 2 * r, 2 * r, img.height, minFontSize);
                                     }
                                     break;
                             }
@@ -173,6 +235,7 @@ module.exports = function (RED) {
             }
         });
 
+        // Handle errors and send error message
         function handleError(err, msg, errorText, originalPayload = null) {
             node.error(err, errorText, msg);
             msg.error = err;
